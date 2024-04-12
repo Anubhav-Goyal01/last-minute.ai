@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items at the start of the cross axis (top) */
+    max-width: 1500px;
+    margin: auto;
+    padding: 30px;
+  }
+  
+  .left {
+    width: 20%;
+    padding-right:100px;
+    /* margin-top: 200px; */
+  }
+  
+  .right {
+    width: 80%;
+  }
+  

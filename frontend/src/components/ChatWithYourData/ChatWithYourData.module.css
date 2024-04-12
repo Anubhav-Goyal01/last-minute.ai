@@ -1,0 +1,102 @@
+.chatContainer {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    max-width: 910px;
+    margin: auto;
+    padding: 2rem;
+    background-color: #fff;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo {
+    /* Style your logo here */
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between; /* Align items horizontally to the center */
+    margin-bottom: 20px;
+}
+
+.input {
+    width: calc(100% - 100px); /* Adjust as needed */
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.button {
+    
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius:10px;
+    font-weight: 600;
+    font-size:14px;
+    margin-left:-500px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.suggestedQuestions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.suggestedQuestion {
+    background-color: #eceff1;
+    border: none;
+    padding: 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 30%;
+    text-align: left;
+}
+
+.suggestedQuestion:hover {
+    background-color: #cfd8dc;
+}
+
+.loading {
+    text-align: center;
+    font-style: italic;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.conversations {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    padding: 1rem;
+    margin-bottom: 2rem;
+    overflow-y:scroll;
+}
+
+.conversationEntry {
+    background-color: #eceff1;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.question {
+    font-weight: bold;
+}
+
+.answer {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
