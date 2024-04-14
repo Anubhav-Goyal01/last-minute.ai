@@ -12,19 +12,17 @@
     margin-bottom: 2rem;
 }
 
-.logo {
-    /* Style your logo here */
-}
-
 .inputContainer {
     display: flex;
-    flex-direction:row;
-    justify-content: space-between; /* Align items horizontally to the center */
+    flex-direction: row;
+    justify-content: space-between;
+    /* Align items horizontally to the center */
     margin-bottom: 20px;
 }
 
 .input {
-    width: calc(100% - 100px); /* Adjust as needed */
+    width: calc(100% - 100px);
+    /* Adjust as needed */
     margin-right: 10px;
     padding: 10px;
     border-radius: 10px;
@@ -32,16 +30,16 @@
 }
 
 .button {
-    
+
     padding: 10px;
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
-    border-radius:10px;
+    border-radius: 10px;
     font-weight: 600;
-    font-size:14px;
-    margin-left:-500px;
+    font-size: 14px;
+    margin-left: -500px;
 }
 
 .button:hover {
@@ -64,6 +62,7 @@
     transition: background-color 0.2s;
     width: 30%;
     text-align: left;
+    border-radius: 10px;
 }
 
 .suggestedQuestion:hover {
@@ -79,10 +78,10 @@
 
 .conversations {
     border-radius: 8px;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     padding: 1rem;
     margin-bottom: 2rem;
-    overflow-y:scroll;
+    overflow-y: scroll;
 }
 
 .conversationEntry {
