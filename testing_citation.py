@@ -1,6 +1,6 @@
 import os
 import openai
-import numpy as np
+import json
 from dotenv import load_dotenv
 from langchain.schema import Document
 from langchain_community.document_loaders import PyPDFLoader
@@ -12,7 +12,6 @@ from langchain_openai import AzureChatOpenAI
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-import faiss
 load_dotenv()
 
 embeddings = AzureOpenAIEmbeddings(
@@ -42,17 +41,7 @@ def create_db_from_documents(documents: list):
         print(f"Loaded {len(split_documents)} documents from {document}")
 
     global embeddings
-    embeddings_array = np.array(embeddings.embed_documents([doc.page_content for doc in all_docs]))
-
-    dimension = embeddings_array.shape[1]
-    index = faiss.IndexFlatL2(dimension)  
-    index.add(embeddings_array)
-
-    docstore = {i: doc for i, doc in enumerate(all_docs)}
-    index_to_docstore_id = {i: i for i in range(len(all_docs))}
-
-
-    vectorstore = FAISS(index=index, docstore=docstore, index_to_docstore_id=index_to_docstore_id)
+    vectorstore = FAISS.from_documents(all_docs, embeddings)
     vectorstore.save_local(DB_FAISS_PATH)
     return "Vector store created successfully."
 
@@ -88,21 +77,34 @@ def Generate_Questions(question, answer):
     return questions
 
 def get_response_from_query(question, rag_chain):
-    ai_msg_1 = rag_chain.invoke({"input": question, "chat_history": chat_history})
-    chat_history.extend([HumanMessage(content=question), ai_msg_1["answer"]])
-    
-    metadata = ai_msg_1["answer"].metadata
-    pdf_name = metadata['pdf_name']
-    page_number = metadata['page_number']
-    
-    questions = Generate_Questions(question, ai_msg_1['answer'])
+    response = rag_chain.invoke({"input": question, "chat_history": chat_history})
+    chat_history.extend([HumanMessage(content=question), HumanMessage(content=response['answer'])])
+
+    # Assume response includes context data with document references
+    answer = response['answer']
+    context_documents = response['context']
+
+    # Extract metadata from context documents for citation
+    sources = []
+    for doc in context_documents:
+        pdf_name = doc.metadata['pdf_name']
+        page_number = doc.metadata['page_number']
+        sources.append(f"{pdf_name}, p. {page_number}")
+
+    # Generate follow-up questions based on the provided answer
+    questions = Generate_Questions(question, answer)
+
+    # Formatting the sources into a single string for display
+    source_citations = "; ".join(sources)
+
     return {
-        "Answer": f"{ai_msg_1['answer']} (Source: {pdf_name}, p. {page_number})",
+        "Answer": f"{answer} (Sources: {source_citations})",
         "Questions": questions
     }
 
+
 documents = ["NLP.pdf"]
-create_db_from_documents(documents)
+# create_db_from_documents(documents)
 
 
 vectorstore = FAISS.load_local(DB_FAISS_PATH, embeddings, allow_dangerous_deserialization=True)
@@ -152,6 +154,6 @@ rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chai
 
 
 # Test this
-question = "What is NLP?"
+question = "How is tf-idf calculated?"
 response = get_response_from_query(question, rag_chain)
 print(response)
