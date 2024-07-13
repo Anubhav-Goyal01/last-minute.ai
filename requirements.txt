@@ -1,3 +1,11 @@
 pypdf
 unstructured
-chromadb
+Flask
+Flask-Cors
+langchain
+langchain-core
+langchain-openai
+langchian-community
+langchain-pinecone
+openai
+python-dotenv
