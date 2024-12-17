@@ -25,7 +25,7 @@ embeddings = AzureOpenAIEmbeddings(
 )
 
 def chain_setup():
-    vectorstore = PineconeVectorStore(index_name="test", embedding=embeddings)
+    vectorstore = PineconeVectorStore(index_name="test", embedding=embeddings, namespace =  "test")
     retriever = vectorstore.as_retriever()
     llm = AzureChatOpenAI(
         azure_endpoint = os.environ["AZURE_ENDPOINT"], 
@@ -132,6 +132,7 @@ def upload():
         response_message = create_db_from_documents(all_docs, all_doc_types)
         return jsonify({"response": "Embeddings Generated Successfully"}), 200
     except Exception as e:
+        print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':

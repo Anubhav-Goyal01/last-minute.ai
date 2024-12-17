@@ -67,7 +67,7 @@ def create_db_from_documents(documents: list, doc_types: list):
             continue
         
         content = loader.load()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=50)
         docs = text_splitter.split_documents(content)
         all_docs.extend(docs)
         print(f"Loaded {len(docs)} documents from {doc_type}.")     
@@ -75,7 +75,8 @@ def create_db_from_documents(documents: list, doc_types: list):
     vectorstore_from_docs = PineconeVectorStore.from_documents(
         all_docs,
         index_name="test",
-        embedding=embeddings
+        embedding=embeddings,
+        namespace = "test"
     )
     return "Vector store created successfully."
 
