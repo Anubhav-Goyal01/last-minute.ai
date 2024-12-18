@@ -15,6 +15,8 @@ import json
 app = Flask(__name__)
 CORS(app)
 
+from dotenv import load_dotenv
+load_dotenv()
 
 embeddings = AzureOpenAIEmbeddings(
     model= "text-embedding-3-large",
@@ -25,13 +27,13 @@ embeddings = AzureOpenAIEmbeddings(
 )
 
 def chain_setup():
-    vectorstore = PineconeVectorStore(index_name="test", embedding=embeddings, namespace =  "test")
+    vectorstore = PineconeVectorStore(index_name="html-embeddings-product-urls", embedding=embeddings, namespace = 'test')
     retriever = vectorstore.as_retriever()
     llm = AzureChatOpenAI(
-        azure_endpoint = os.environ["AZURE_ENDPOINT"], 
-        api_key=os.environ["API_KEY"],  
+        azure_endpoint= os.environ["AZURE_ENDPOINT_GPT_4"], 
+        api_key=os.environ["API_KEY_GPT_4"],  
         api_version=os.environ["API_VERSION"],
-        azure_deployment='gpt35t',
+        azure_deployment='shoppin-gpt4o',
     )
 
 
@@ -88,11 +90,13 @@ def get_answer():
     try:
         rag_chain = chain_setup()
         answer_and_questions = get_response_from_query(question, rag_chain)
+        print(f"Answer: {answer_and_questions['Answer']}")
         return jsonify({
             "Answer": answer_and_questions['Answer'],
             "Questions": answer_and_questions['Questions']
         })
     except Exception as e:
+        print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
 

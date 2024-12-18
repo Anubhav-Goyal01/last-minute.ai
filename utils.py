@@ -28,7 +28,7 @@ def Generate_Questions(question, answer):
     )
 
     completion = client.chat.completions.create(
-        model='sfslackbot',
+        model='shoppin-gpt4o',
         messages=[
             {"role": "system", "content": f"""User will provide you with a question and a answer. Based on the pair, generate 3 most probable follow up questions the user might ask. Give the result in the form a list of questions. 
             Example Output: ["Question1", "Question2", "Quesiton3"]. MAKE SURE YOU GIVE PYTHON LIST AS A OUTPUT.
@@ -74,10 +74,11 @@ def create_db_from_documents(documents: list, doc_types: list):
 
     vectorstore_from_docs = PineconeVectorStore.from_documents(
         all_docs,
-        index_name="test",
+        index_name="html-embeddings-product-urls",
         embedding=embeddings,
-        namespace = "test"
+        namespace = 'test'
     )
+    print(f"Created vector store with {len(all_docs)} documents.")
     return "Vector store created successfully."
 
 
